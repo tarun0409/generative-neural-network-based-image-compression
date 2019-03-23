@@ -1,1 +1,1 @@
-# neural-network-based-image-compression
+# neural-network-based-image-compression using GAN
