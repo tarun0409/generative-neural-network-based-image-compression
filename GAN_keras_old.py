@@ -51,8 +51,8 @@ class DCGAN(object):
         # In: 28 x 28 x 1, depth = 1
         # Out: 14 x 14 x 1, depth=64
         input_shape = (self.img_rows, self.img_cols, self.channel)
-        self.D.add(Conv2D(depth*1, 5, strides=2, input_shape=input_shape,\
-            padding='same'))
+            self.D.add(Conv2D(depth*1, 5, strides=2, input_shape=input_shape,\
+                padding='same'))
         self.D.add(LeakyReLU(alpha=0.2))
         self.D.add(Dropout(dropout))
 
