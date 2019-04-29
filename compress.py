@@ -35,7 +35,7 @@ def Compress_MNIST():
     # Compress_M.add(LeakyReLU(alpha=0.05))
     Compress_M.add(Dense(784))
 #     Compress_M.add(Linear())
-    Compress_M.compile(loss='mean_squared_error', optimizer='adam', metrics=['accuracy'])
+    Compress_M.compile(loss='cosine_proximity', optimizer='adam', metrics=['accuracy'])
 
     x = npy.array(gen_image)
     y = npy.array(orig_image)
@@ -62,7 +62,21 @@ def Compress_MNIST():
     plt.show()
 
 if __name__ == "__main__":
-    Data_Set = sys.argv[1]
-    if (Data_Set=="MNIST"):
+    if(len(sys.argv) < 3):
+        print('Please provide image path and dataset name')
+        sys.exit()
+    image_path = sys.argv[1]
+    dataset = sys.argv[2]
+    if dataset == 'mnist':
         Compress_MNIST()
-    
+    else:    
+        generator_weights_path = dataset + '_generator_weights.h5'
+        discriminator_weights = dataset + '_discriminator_weights.h5'
+        model_obj = None
+        orig_image = Image.open(image_path)
+        dims = np.shape(np.asarray(orig_image))
+        tot_dim = 1
+        for d in dims:
+            tot_dim *= d
+        
+
