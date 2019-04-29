@@ -16,7 +16,8 @@ def mse(imageA, imageB):
 
 
 def ms_ssim(imageA, imageB):
-	error = tf.image.ssim_multiscale(imageA, imageB,1000000)#measure.compare_ssim(imageA, imageB)
+	error = measure.compare_ssim(imageA, imageB,multichannel=True)
+	# tf.image.ssim_multiscale(imageA, imageB,1)
 	return error
 
 def psnr(imageA, imageB): # higher the value, lesser the loss
@@ -35,11 +36,9 @@ def L1(imageA, imageB):
 
 original = cv2.imread(sys.argv[1])
 compressed = cv2.imread(sys.argv[2])
-im1 = tf.image.decode_png(sys.argv[1])
-im2 = tf.image.decode_png(sys.argv[2])
 l1_error = L1(original,compressed)
 mse_error = mse(original,compressed)
-ms_ssim_error = ms_ssim(im1,im2)
+ms_ssim_error = ms_ssim(original,compressed)
 psnr_error=psnr(original,compressed)
 print(mse_error,psnr_error,ms_ssim_error,l1_error)
 #mssim_error=MSSIM().compute(original, compressed)
