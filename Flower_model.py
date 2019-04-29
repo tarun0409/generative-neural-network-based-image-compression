@@ -92,34 +92,6 @@ class DCGAN(object):
         print("Discriminator Summary")
         self.Discriminator.summary()
         return self.Discriminator
-#         self.Discriminator.add(Flatten())
-#         self.Discriminator.add(Dense(512))
-#         self.Discriminator.add(LeakyReLU(alpha=0.05))
-#         self.Discriminator.add(Dropout(0.5))
-        # self.Discriminator.add(Dense(NB_CLASSES))
-        # self.Discriminator.add(Activation('softmax'))
-
-
-
-        # self.Discriminator.add(Conv2D(depth*1, 5, strides=2, input_shape=input_shape, padding='same'))
-        # self.Discriminator.add(LeakyReLU(alpha=0.2))
-        # self.Discriminator.add(Dropout(dropout))
-
-        # self.Discriminator.add(Conv2D(depth*2, 5, strides=2, padding='same'))
-        # self.Discriminator.add(LeakyReLU(alpha=0.2))
-        # self.Discriminator.add(Dropout(dropout))
-
-        # self.Discriminator.add(Conv2D(depth*4, 5, strides=2, padding='same'))
-        # self.Discriminator.add(LeakyReLU(alpha=0.2))
-        # self.Discriminator.add(Dropout(dropout))
-
-        # self.Discriminator.add(Conv2D(depth*8, 5, strides=1, padding='same'))
-        # self.Discriminator.add(LeakyReLU(alpha=0.2))
-        # self.Discriminator.add(Dropout(dropout))
-
-        # Output: 1-dim probability
-        
-        # self.Discriminator.add(Dense(28))
         
 
     def discriminator_model(self):
@@ -151,7 +123,7 @@ class Flower_model(object):
 
 #         self.x_train = input_data.read_data_sets("mnist", one_hot=True).train.images
 #         self.x_train = self.x_train.reshape(-1, self.img_rows, self.img_cols, 1).astype(npy.float32)
-        airfile = open('./flowers_resized_train.pickle', 'rb') 
+        airfile = open('./Flower/flowers_resized_train.pickle', 'rb') 
         self.x_train = pickle.load(airfile)
         airfile.close()
         self.x_train = self.x_train.astype(npy.float32)
@@ -168,12 +140,12 @@ class Flower_model(object):
             images_train = self.x_train[npy.random.randint(0,self.x_train.shape[0], size=batch_size), :, :, :]
 #             print("Images train",npy.shape(images_train))
             if(i==0):
-              print(npy.shape(images_train))
-              img = images_train[0]/255
+                print(npy.shape(images_train))
+                img = images_train[0]/255
 #               image = npy.reshape(images_train[0], [self.img_rows, self.img_cols,self.img_chanl])
 #               print(images_train[0])
-              plt.imshow(img)
-              plt.show()
+                plt.imshow(img)
+                plt.show()
             noise = npy.random.uniform(-1.0, 1.0, size=[batch_size, 3072]) #changed
             images_gen = self.generator.predict(noise)
 #             print("Images Gen",npy.shape(images_gen))

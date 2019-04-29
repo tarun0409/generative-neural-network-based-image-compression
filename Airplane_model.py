@@ -28,6 +28,7 @@ class DCGAN(object):
         self.Adversarial_Model = None
         self.Compressor_Model  = None
 
+    #genrerator that takes random noise as input and outputs an image of the required dimensions
     def generator(self):
         if self.Generator:
             return self.Generator
@@ -66,7 +67,7 @@ class DCGAN(object):
         self.Generator.summary()
         return self.Generator
 
-
+    #discriminator that takes images (gererated and original) as input
     def discriminator(self):
         if self.Discriminator:
             return self.Discriminator
@@ -92,36 +93,10 @@ class DCGAN(object):
         print("Discriminator Summary")
         self.Discriminator.summary()
         return self.Discriminator
-#         self.Discriminator.add(Flatten())
-#         self.Discriminator.add(Dense(512))
-#         self.Discriminator.add(LeakyReLU(alpha=0.05))
-#         self.Discriminator.add(Dropout(0.5))
-        # self.Discriminator.add(Dense(NB_CLASSES))
-        # self.Discriminator.add(Activation('softmax'))
 
 
-
-        # self.Discriminator.add(Conv2D(depth*1, 5, strides=2, input_shape=input_shape, padding='same'))
-        # self.Discriminator.add(LeakyReLU(alpha=0.2))
-        # self.Discriminator.add(Dropout(dropout))
-
-        # self.Discriminator.add(Conv2D(depth*2, 5, strides=2, padding='same'))
-        # self.Discriminator.add(LeakyReLU(alpha=0.2))
-        # self.Discriminator.add(Dropout(dropout))
-
-        # self.Discriminator.add(Conv2D(depth*4, 5, strides=2, padding='same'))
-        # self.Discriminator.add(LeakyReLU(alpha=0.2))
-        # self.Discriminator.add(Dropout(dropout))
-
-        # self.Discriminator.add(Conv2D(depth*8, 5, strides=1, padding='same'))
-        # self.Discriminator.add(LeakyReLU(alpha=0.2))
-        # self.Discriminator.add(Dropout(dropout))
-
-        # Output: 1-dim probability
         
-        # self.Discriminator.add(Dense(28))
-        
-
+    # discriminator model that uses loss function to tell original and generated image apart 
     def discriminator_model(self):
         if self.Discriminator_Model:
             return self.Discriminator_Model
@@ -131,6 +106,7 @@ class DCGAN(object):
         self.Discriminator_Model.compile(loss='binary_crossentropy', optimizer=optimizer, metrics=['accuracy'])
         return self.Discriminator_Model
 
+    # adversarial model that resulting in both the generator and discriminator
     def adversarial_model(self):
         if self.Adversarial_Model:
             return self.Adversarial_Model
@@ -151,7 +127,8 @@ class CIFAR(object):
 
 #         self.x_train = input_data.read_data_sets("mnist", one_hot=True).train.images
 #         self.x_train = self.x_train.reshape(-1, self.img_rows, self.img_cols, 1).astype(npy.float32)
-        airfile = open('./automobile.pickle', 'rb') 
+        
+        airfile = open('./Airplane/airplane_train.pickle', 'rb') 
         self.x_train = pickle.load(airfile)
         airfile.close()
         self.x_train = self.x_train.astype(npy.float32)
@@ -168,13 +145,11 @@ class CIFAR(object):
             images_train = self.x_train[npy.random.randint(0,self.x_train.shape[0], size=batch_size), :, :, :]
 #             print("Images train",npy.shape(images_train))
             if(i==0):
-              print(npy.shape(images_train))
-              img = images_train[0]/255
-#               image = npy.reshape(images_train[0], [self.img_rows, self.img_cols,self.img_chanl])
-#               print(images_train[0])
-              plt.imshow(img)
-              plt.show()
-            noise = npy.random.uniform(-1.0, 1.0, size=[batch_size, 3072]) #changed
+                print(npy.shape(images_train))
+                img = images_train[0]/255
+                plt.imshow(img)
+                plt.show()
+            noise = npy.random.uniform(-1.0, 1.0, size=[batch_size, 3072]) 
             images_gen = self.generator.predict(noise)
 #             print("Images Gen",npy.shape(images_gen))
             x = npy.concatenate((images_train, images_gen))
@@ -183,7 +158,7 @@ class CIFAR(object):
             d_loss = self.discriminator.train_on_batch(x,y)
 
             y = npy.ones([batch_size, 1])
-            noise = npy.random.uniform(-1.0, 1.0, size=[batch_size, 3072]) #changed
+            noise = npy.random.uniform(-1.0, 1.0, size=[batch_size, 3072]) 
             a_loss = self.adversary.train_on_batch(noise, y)
 
             log_mesg = "%d: [D loss: %f, acc: %f]" % (i, d_loss[0], d_loss[1])
@@ -191,7 +166,7 @@ class CIFAR(object):
             print(log_mesg)
 
             if (i%100==0):
-                noisy = npy.random.uniform(-1.0, 1.0, size=[1, 3072]) #changed
+                noisy = npy.random.uniform(-1.0, 1.0, size=[1, 3072]) 
                 images = self.generator.predict(noisy)
                 image = npy.reshape(images, [self.img_rows, self.img_cols,self.img_chanl])
                 plt.imshow(image)
